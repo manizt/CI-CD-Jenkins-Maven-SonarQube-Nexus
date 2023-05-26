@@ -75,7 +75,8 @@ pipeline{
                     credentialsId: 'nexus', 
                     groupId: 'com.example', 
                     nexusUrl: '54.174.217.139:8081', 
-                    nexusVersion: 'nexus3', protocol: 'http', 
+                    nexusVersion: 'nexus3', 
+                    protocol: 'http', 
                     repository: nexusRepo, 
                     version: "${readPomVersion.version}"
 
@@ -85,9 +86,12 @@ pipeline{
         stage('Docker Image Build'){
             steps{
                 script{
-                    sh 'docker image build -t $JOB_NAME:v1.$BUILD_ID .'
-                    sh 'docker image tag $JOB_NAME:v1.$BUILD_ID manizt/$JOB_NAME:v1.$BUILD_ID'
-                    sh 'docker image tag $JOB_NAME:v1.$BUILD_ID manizt/$JOB_NAME:latest'
+                    def repositoryName = "demoapplication" // Change this to your desired lowercase repository name
+                    def tag = "v1.${BUILD_ID}"
+            
+                    sh "docker image build -t ${repositoryName}:${tag} ."
+                    sh "docker image tag ${repositoryName}:${tag} manizt/${repositoryName}:${tag}"
+                    sh "docker image tag ${repositoryName}:${tag} manizt/${repositoryName}:latest"
                 }
             }
         }
