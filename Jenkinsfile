@@ -42,7 +42,7 @@ pipeline{
 
             steps{
                 script{
-                    withSonarQubeEnv(credentialsId: 'sonarqube-secret') {
+                    withSonarQubeEnv(credentialsId: 'sonarqube') {
                         sh 'mvn clean package sonar:sonar'
                     }
 
@@ -52,7 +52,7 @@ pipeline{
         stage('Quality Gate status') {
             steps{
                 script{
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-secret'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube'
                 }
             }
         }
@@ -60,18 +60,18 @@ pipeline{
             steps{
 
                 script{
-                    nexusArtifactUploader artifacts: 
+                 nexusArtifactUploader artifacts: 
+                 [
                     [
-                        [
-                            artifactId: 'springboot',
-                            classifier: '', file: 'target/Uber.jar',
-                            type: 'jar'
-                            ]
-                              
+                        artifactId: 'springboot', 
+                        classifier: '', 
+                        file: 'target/Uber.jar', 
+                        type: 'jar'
+                        ]
                     ], 
-                    credentialsId: 'nexus-auth',
+                    credentialsId: 'nexus-auth', 
                     groupId: 'com.example', 
-                    nexusUrl: '34.229.148.251:8081', 
+                    nexusUrl: '54.174.217.139:8081', 
                     nexusVersion: 'nexus3', 
                     protocol: 'http', 
                     repository: 'demoapp-release', 
