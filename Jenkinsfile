@@ -86,7 +86,7 @@ pipeline{
         stage('Docker Image Build'){
             steps{
                 script{
-                    def repositoryName = "demoapplication" // Change this to your desired lowercase repository name
+                    def repositoryName = "demoapplication"
                     def tag = "v1.${BUILD_ID}"
             
                     sh "docker image build -t ${repositoryName}:${tag} ."
@@ -98,6 +98,9 @@ pipeline{
         stage('Push image to Docker Hub'){
             steps{
                 script{
+                    def repositoryName = "demoapplication" // Change this to your desired lowercase repository name
+                    def tag = "v1.${BUILD_ID}"
+                    
                     withCredentials([string(credentialsId: 'docker_creds', variable: 'dockerhub_password')]) {
 
                         sh 'docker login -u manizt -p ${dockerhub_password}'
