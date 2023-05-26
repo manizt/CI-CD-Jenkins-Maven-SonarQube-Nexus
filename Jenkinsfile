@@ -95,5 +95,17 @@ pipeline{
                 }
             }
         }
+        stage('Push image to Docker Hub'){
+            steps{
+                script{
+                    withCredentials([string(credentialsId: 'docker_creds', variable: 'dockerhub_password')]) {
+
+                        sh 'docker login -u manizt -p ${dockerhub_password}'
+                        sh "docker image push manizt/${repositoryName}:${tag}"
+                        sh "docker image push manizt/${repositoryName}:latest"
+                    }
+                }
+            }
+        }
     }
 }
