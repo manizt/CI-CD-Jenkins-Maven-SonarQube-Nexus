@@ -32,11 +32,22 @@ pipeline{
             }
         }
         stage('Maven Build'){
-            
+
             steps{
                 sh 'mvn clean install'
             }
 
+        }
+        stage('Static code analysis'){
+
+            steps{
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonarqube-secret') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+
+                }
+            }
         }
     }
 }
